@@ -1,0 +1,1 @@
+select top 1 convert(decimal(10,4),LONG_W) from station where LAT_N>38.7780 order by LAT_N asc

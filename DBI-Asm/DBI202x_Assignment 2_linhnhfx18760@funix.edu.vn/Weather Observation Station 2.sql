@@ -1,0 +1,1 @@
+Select cast(Round(Sum(Lat_N),2) as decimal(10,2)), cast(Round(Sum(Long_W),2) as decimal(10,2)) from station;
