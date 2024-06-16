@@ -1,13 +1,14 @@
-WITH CTE AS(
-    SELECT
-        Start_Date,
-        End_Date,
-        DATEADD(day, -ROW_NUMBER() OVER(ORDER BY Start_Date), Start_Date)[Grouping]
-    FROM Projects
+with cte as(
+    select
+            Start_Date,
+            End_Date,
+            dateadd(day, -row_number() over (order by Start_Date), Start_Date)[Grouping]
+    from Projects
 )
-SELECT
-    MIN(Start_Date)[Project_Start_Date],
-    MAX(End_Date)[Project_End_Date]
-FROM CTE
-GROUP BY Grouping
-ORDER BY DATEDIFF(day, MIN(Start_Date), MAX(End_Date)), MIN(Start_Date)
+
+select
+        min(Start_Date)[Project_Start_Date], 
+        max(End_Date)[Project_End_Date]
+from cte
+group by grouping
+order by datediff(day, min(Start_Date), max(End_Date)), min(Start_Date)

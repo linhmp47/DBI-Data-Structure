@@ -1,14 +1,25 @@
-select 
-h.hacker_id, 
-h.name, 
-total_score_by_hacker.total_score
+with total_score_by_scores as (
+select
+        hacker_id,
+        sum(max_score) as total_score
 from
-    (select hacker_id, sum(max_score) as total_score
-    from
-        (select hacker_id, challenge_id, MAX(score) as max_score
-        from Submissions
-        group by hacker_id, challenge_id) as max_scores
-    group by hacker_id) as total_score_by_hacker
-join hackers h on total_score_by_hacker.hacker_id = h.hacker_id
-where total_score_by_hacker.total_score > 0
-order by total_score_by_hacker.total_score desc, h.hacker_id asc;
+
+(select
+        hacker_id, 
+        challenge_id, 
+        max(score) as max_score
+from submissions
+group by hacker_id, challenge_id) as max_scores
+
+group by hacker_id
+)
+
+select 
+        h.hacker_id,
+        h.name,
+        t.total_score
+from hackers h join 
+        total_score_by_scores t 
+on h.hacker_id = t.hacker_id 
+where t.total_score > 0
+order by total_score desc, hacker_id;
